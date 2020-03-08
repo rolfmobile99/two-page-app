@@ -29,10 +29,30 @@ import "./styles.css";
 // };
 
 class StartPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      nameHasError: false
+    };
+  }
+
+  validateInputAndGoto(page) {
+    if (this.props.getData("name") === "") {
+      this.setState({ nameHasError: true });
+    } else {
+      this.setState({ nameHasError: false });
+      this.props.goToPage(page);
+    }
+  }
+
   render() {
     var nameStyle = {
       //border: "2px solid red"
     };
+
+    if (this.state.nameHasError) {
+      nameStyle.border = "2px solid red";
+    }
 
     return (
       <p>
@@ -49,7 +69,7 @@ class StartPage extends Component {
         />
         <br />
         <br />
-        <button onClick={() => this.props.goToPage(WelcomePage)}>
+        <button onClick={() => this.validateInputAndGoto(WelcomePage)}>
           Continue...
         </button>
       </p>
@@ -88,6 +108,11 @@ class App extends Component {
     this.setState({
       page: page
     });
+    // if (page === StartPage) {
+    //   this.setState({
+    //     name: ""
+    //   });
+    // }
   }
 
   getData(dataName) {
